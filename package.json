@@ -1,0 +1,23 @@
+{
+  "name": "aube",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node application/bootloader.js",
+    "watch": "node ./node_modules/nodemon/bin/nodemon.js ./application/bootloader.js --watch ./application"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anotherhope/aube.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anotherhope/aube/issues"
+  },
+  "homepage": "https://github.com/anotherhope/aube#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
