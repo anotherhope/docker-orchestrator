@@ -1,28 +1,22 @@
 {
-  "name": "aube",
+  "name": "Docker-Orchestrator",
   "version": "1.0.0",
-  "description": "aube is a docker manager",
-  "main": "index.js",
+  "description": "Docker Orchestrator is a docker manager",
+  "main": "lib/bootloader.js",
   "scripts": {
-    "start": "node application/bootloader.js",
-    "watch": "node ./node_modules/nodemon/bin/nodemon.js ./application/bootloader.js --watch ./application"
+    "start": "node lib/bootloader.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anotherhope/aube.git"
+    "url": "git+https://github.com/anotherhope/docker-orchestrator.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anotherhope/aube/issues"
+    "url": "https://github.com/anotherhope/docker-orchestrator/issues"
   },
-  "homepage": "https://github.com/anotherhope/aube#readme",
-  "devDependencies": {
-    "nodemon": "^2.0.3"
-  },
+  "homepage": "https://github.com/anotherhope/docker-orchestrator#readme",
   "dependencies": {
-    "dockerode": "^3.2.0",
-    "express": "^4.17.1",
-    "socketio": "^1.0.0"
+    "dockerode": "^3.2.0"
   }
 }

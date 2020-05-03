@@ -1,1 +1,1 @@
-# Docker API Manager
+# Docker API Orchestrator
