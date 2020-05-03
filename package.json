@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/anotherhope/docker-orchestrator#readme",
   "dependencies": {
-    "dockerode": "^3.2.0"
+    "dockerode": "^3.2.0",
+    "express": "^4.17.1"
   }
 }
