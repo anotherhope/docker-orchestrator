@@ -2,9 +2,9 @@
   "name": "docker-orchestrator",
   "version": "1.0.0",
   "description": "docker orchestrator",
-  "main": "lib/bootloader.js",
+  "main": "application/bootloader.js",
   "scripts": {
-    "start": "node lib/bootloader.js"
+    "start": "node application/bootloader.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/anotherhope/docker-orchestrator#readme",
   "dependencies": {
-    "dockerode": "^3.2.0"
+    "dockerode": "^3.2.0",
+    "yaml": "^1.9.2"
   }
 }
