@@ -6,8 +6,11 @@ const fs 		= require("fs");
 
 const file = fs.readFileSync(__dirname + '/../config/statement.yaml', 'utf8');
 let config = YAML.parse(file);
-fs.writeFileSync(__dirname + '/../config/statement-edit.yaml',YAML.stringify(config), 'utf8');
 
+console.log(config)
+
+
+/*
 var cluster = require('cluster');
 
 if(cluster.isMaster) {
@@ -31,8 +34,7 @@ if(cluster.isMaster) {
 } else {
 	console.log('worker')
 }
-
-
+*/
 
 
 
