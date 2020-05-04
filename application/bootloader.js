@@ -4,7 +4,7 @@ const path 		= require("path");
 const fs 		= require("fs");
 
 
-const file = fs.readFileSync(__dirname + '/../config/statement.yaml', 'utf8');
+const file = fs.readFileSync('/etc/docker.d/composes/base.yml', 'utf8');
 let config = YAML.parse(file);
 
 console.log(config)
