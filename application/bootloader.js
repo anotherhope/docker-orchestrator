@@ -1,13 +1,14 @@
-const DockerAPI = require("dockerode");
-const YAML 		= require("yaml");
+// Internal
 const path 		= require("path");
 const fs 		= require("fs");
+// External
+const DockerAPI = require("dockerode");
+const YAML 		= require("yaml");
+
+const compose 	= YAML.parse(fs.readFileSync(process.env.DOCKER_COMPOSE, 'utf8'));
 
 
-const file = fs.readFileSync('/etc/docker.d/composes/bases.yml', 'utf8');
-let config = YAML.parse(file);
-
-console.log(config)
+console.log(compose)
 
 
 /*
