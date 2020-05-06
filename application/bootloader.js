@@ -5,7 +5,7 @@ const fs 		= require("fs");
 const DockerAPI = require("dockerode");
 const YAML 		= require("yaml");
 
-if(!process.env.DOCKER_COMPOSE || !fs.existSync(process.env.DOCKER_COMPOSE)){
+if(!process.env.DOCKER_COMPOSE || !fs.existsSync(process.env.DOCKER_COMPOSE)){
 	process.exit();
 }
 
