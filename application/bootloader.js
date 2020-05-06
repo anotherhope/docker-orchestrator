@@ -5,10 +5,13 @@ const fs 		= require("fs");
 const DockerAPI = require("dockerode");
 const YAML 		= require("yaml");
 
-const compose 	= YAML.parse(fs.readFileSync(process.env.DOCKER_COMPOSE, 'utf8'));
+if(!process.env.DOCKER_COMPOSE || !fs.existSync(process.env.DOCKER_COMPOSE)){
+	process.exit();
+}
 
+const compose = YAML.parse(fs.readFileSync(process.env.DOCKER_COMPOSE, 'utf8'));
 
-console.log(compose)
+fs.mkdirSync(__dirname + "/../.cache");
 
 
 /*
