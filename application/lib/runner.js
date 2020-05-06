@@ -16,9 +16,12 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
-			api.buildImage('/etc/docker.d/contexts/binary',{
+			api.buildImage({
+				context: '/etc/docker.d/contexts/binary',
+				src : [ '../../dockerfiles/bases/' + serviceName ]
+			},{
 				t: serviceName,
-				dockerfile: '../../dockerfiles/bases/' + serviceName
+				dockerfiles : serviceName
 			}, function (err, response) {
 				console.log(...arguments);
 			});
