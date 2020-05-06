@@ -1,3 +1,5 @@
+require(__dirname + "/prototype/Object.js");
+
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
 const api 		= new DockerAPI({ 
