@@ -4,7 +4,8 @@ const fs 		= require("fs");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 	host: process.env.DOCKER_HOST || '192.168.1.4',
-	port: process.env.DOCKER_PORT || 2376
+	port: process.env.DOCKER_PORT || 2376,
+	version : 'v1.40'
 });
 
 module.exports  = class Runner {
