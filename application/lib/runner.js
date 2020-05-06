@@ -1,6 +1,6 @@
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
-const fs 		= require("fs");
+const fs 		= require("fs-extra");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 	host: process.env.DOCKER_HOST || '192.168.1.4',
@@ -12,6 +12,8 @@ module.exports  = class Runner {
 
 	static deploy(path = null){
 		let compose = Parser.loadFrom(path);
+
+		console.log(fs.existsSync)
 
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
