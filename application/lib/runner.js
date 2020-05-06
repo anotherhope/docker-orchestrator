@@ -25,7 +25,7 @@ module.exports  = class Runner {
 				fs.copy('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
 
 				api.buildImage({ 
-					context: build + '/' + serviceName
+					context: build + '/' + serviceName,
 					src: ["Dockerfile"]
 				},{
 					t: serviceName
