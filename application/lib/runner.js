@@ -24,7 +24,10 @@ module.exports  = class Runner {
 				fs.copy('/etc/docker.d/contexts/binary', build + '/' + serviceName);
 				fs.copy('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
 
-				api.buildImage({ context: build + '/' + serviceName },{
+				api.buildImage({ 
+					context: build + '/' + serviceName
+					src: ["Dockerfile"]
+				},{
 					t: serviceName
 				}, function (err, response) {
 					console.log(...arguments);
