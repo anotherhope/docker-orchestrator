@@ -1,4 +1,3 @@
-require(__dirname + "/prototype/Object.js");
 
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
@@ -11,7 +10,7 @@ module.exports  = class Runner {
 	static deploy(path = null){
 		let compose = Parser.loadFrom(path);
 
-		for (let service of compose.services){
+		for (let service in compose.services){
 			
 			console.log(service);
 			/*
