@@ -8,7 +8,7 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
-const build = __dirname + '/../.build';
+const build = __dirname + '/../../.build';
 
 module.exports  = class Runner {
 
@@ -18,18 +18,17 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
-			console.log(build);
-			//if(fs.existsSync())
+			if(!fs.existsSync(build + '/' + serviceName)){
+				fs.mkdirp(build + '/' + serviceName);
+			}	fs.emptyDirSync(build + '/' + serviceName);
+				fs.copy('/etc/docker.d/contexts/binary', build + '/' + serviceName);
+				fs.copy('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
 
-			api.buildImage({
-				context: '/etc/docker.d/contexts/binary',
-				src : [ '../../dockerfiles/bases/' + serviceName ]
-			},{
-				t: serviceName,
-				dockerfile : serviceName
-			}, function (err, response) {
-				console.log(...arguments);
-			});
+				api.buildImage({ context: build + '/' + serviceName },{
+					t: serviceName
+				}, function (err, response) {
+					console.log(...arguments);
+				});
 
 		}
 
