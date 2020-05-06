@@ -23,7 +23,7 @@ module.exports  = class Runner {
 				context: '/etc/docker.d/contexts/binary',
 			},{
 				t: serviceName,
-				dockerfile: '/etc/docker.d/dockerfiles/bases/' + serviceName
+				dockerfile: '../../dockerfiles/bases/' + serviceName
 			}, function (err, response) {
 				console.log(...arguments);
 			});
