@@ -1,4 +1,4 @@
-require("application/lib/runner.js")
+require(__dirname + "/lib/runner.js")
 	.deploy(process.env.DOCKER_COMPOSE);
 
 

@@ -1,4 +1,4 @@
-const Parser 	= require("application/lib/parser.js");
+const Parser 	= require(__dirname + "/lib/parser.js");
 
 module.exports = class Runner {
 
