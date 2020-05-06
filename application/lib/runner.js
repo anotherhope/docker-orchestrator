@@ -13,7 +13,7 @@ module.exports  = class Runner {
 	static deploy(path = null){
 		let compose = Parser.loadFrom(path);
 
-		console.log(fs.existsSync)
+		console.log('=>',fs.existsSync)
 
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
