@@ -21,8 +21,8 @@ module.exports  = class Runner {
 			if(!fs.existsSync(build + '/' + serviceName)){
 				fs.mkdirp(build + '/' + serviceName);
 			}	fs.emptyDirSync(build + '/' + serviceName);
-				fs.copy('/etc/docker.d/contexts/binary', build + '/' + serviceName);
-				fs.copy('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
+				fs.copySync('/etc/docker.d/contexts/binary', build + '/' + serviceName);
+				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
 
 				api.buildImage({ 
 					context: build + '/' + serviceName,
