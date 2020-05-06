@@ -21,7 +21,7 @@ module.exports  = class Runner {
 				src : [ '../../dockerfiles/bases/' + serviceName ]
 			},{
 				t: serviceName,
-				//dockerfiles : serviceName
+				dockerfile : serviceName
 			}, function (err, response) {
 				console.log(...arguments);
 			});
