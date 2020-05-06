@@ -11,8 +11,6 @@ if(!process.env.DOCKER_COMPOSE || !fs.existsSync(process.env.DOCKER_COMPOSE)){
 
 const compose = YAML.parse(fs.readFileSync(process.env.DOCKER_COMPOSE, 'utf8'));
 
-fs.mkdirSync(__dirname + "/../.cache");
-
 
 /*
 var cluster = require('cluster');
