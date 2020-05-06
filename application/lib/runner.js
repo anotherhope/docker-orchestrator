@@ -1,4 +1,4 @@
-const Parser 	= require("lib/parser.js");
+const Parser 	= require("application/lib/parser.js");
 
 module.exports = class Runner {
 
