@@ -11,17 +11,16 @@ module.exports  = class Runner {
 
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
-			console.log(serviceName,service);
-			/*
+			console.log(serviceName, service);
+
+			
 			DockerAPI.buildImage({
-				context: __dirname,
-				src: ['Dockerfile', 'file1', 'file2']
+				context: process.env.DOCKER_DIRECTORY + '/dockerfiles/bases/'+serviceName
 			},{
-				t: "imageName"
+				t: serviceName
 			}, function (err, response) {
 				console.log(...arguments);
 			});
-			*/
 
 		}
 
