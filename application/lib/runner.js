@@ -1,4 +1,3 @@
-
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
 const api 		= new DockerAPI({ 
@@ -10,9 +9,9 @@ module.exports  = class Runner {
 	static deploy(path = null){
 		let compose = Parser.loadFrom(path);
 
-		for (let service in compose.services){
-			
-			console.log(service);
+		for (let serviceName in compose.services){
+			let service = compose.services[serviceName];
+			console.log(serviceName,service);
 			/*
 			DockerAPI.buildImage({
 				context: __dirname,
