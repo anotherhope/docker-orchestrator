@@ -25,8 +25,7 @@ module.exports  = class Runner {
 				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
 
 				api.buildImage({ 
-					context: build + '/' + serviceName,
-					src: ["Dockerfile"]
+					context: build + '/' + serviceName
 				},{
 					t: serviceName
 				}, function (err, response) {
