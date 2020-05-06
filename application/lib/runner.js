@@ -14,7 +14,7 @@ module.exports  = class Runner {
 			console.log(serviceName, service);
 
 			
-			DockerAPI.buildImage({
+			api.buildImage({
 				context: process.env.DOCKER_DIRECTORY + '/dockerfiles/bases/'+serviceName
 			},{
 				t: serviceName
