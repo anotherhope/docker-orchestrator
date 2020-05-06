@@ -1,5 +1,6 @@
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
+const fs 		= require("fs");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 	host: process.env.DOCKER_HOST || '192.168.1.4',
