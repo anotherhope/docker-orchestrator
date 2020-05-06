@@ -8,15 +8,18 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
+const build = __dirname + '/../.build';
+
 module.exports  = class Runner {
 
 	static deploy(path = null){
 		let compose = Parser.loadFrom(path);
 
-		console.log('=>',fs.existsSync)
-
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
+
+			console.log(build);
+			//if(fs.existsSync())
 
 			api.buildImage({
 				context: '/etc/docker.d/contexts/binary',
