@@ -14,11 +14,15 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
+			fs.existsSync('/etc/docker.d/dockerfiles/bases/' + serviceName) 
+				? console.log("existe")
+				: console.log("not existe")
+
 			api.buildImage({
 				context: '/etc/docker.d/contexts/binary',
 			},{
 				t: serviceName,
-				dockerfile:'/etc/docker.d/dockerfiles/bases/' + serviceName
+				dockerfile: '/etc/docker.d/dockerfiles/bases/' + serviceName
 			}, function (err, response) {
 				console.log(...arguments);
 			});
