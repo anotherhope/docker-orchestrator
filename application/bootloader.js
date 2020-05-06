@@ -1,15 +1,5 @@
-// Internal
-const path 		= require("path");
-const fs 		= require("fs");
-// External
-const DockerAPI = require("dockerode");
-const YAML 		= require("yaml");
-
-if(!process.env.DOCKER_COMPOSE || !fs.existsSync(process.env.DOCKER_COMPOSE)){
-	process.exit();
-}
-
-const compose = YAML.parse(fs.readFileSync(process.env.DOCKER_COMPOSE, 'utf8'));
+require("lib/runner.js")
+	.deploy(process.env.DOCKER_COMPOSE);
 
 
 /*
