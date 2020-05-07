@@ -26,7 +26,8 @@ module.exports  = class Runner {
 			const lineReader = require('readline').createInterface({
 				input: fs.createReadStream('/tmp/.build/' + serviceName + '/Dockerfile'),
 			}).on('line', (line) => {
-				let match = line.match(/FROM\s([a-z0-9_]+)/gi);
+				let match = RegExp("FROM\s([a-z0-9_]+)","gi").exec(line);
+				//let match = line.match(/FROM\s([a-z0-9_]+)/gi);
 				if (match){
 					console.log('>>',match);
 					//lineReader.close();
