@@ -55,8 +55,7 @@ module.exports  = class Runner {
 
 			for (let service of services){
 				api.getImages(service.from).then((a,b,c,d) => {
-					console.log('inside');
-					console.log(a,b,c,d);
+					console.log('inside',a,b,c,d);
 				})
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
