@@ -67,9 +67,7 @@ module.exports  = class Runner {
 							}
 						}).on('end',() => {
 
-								api.getImage(service.name).then( response => {
-									console.log(response)
-								})
+								console.log(api.getImage(service.name))
 
 						});
 					}
