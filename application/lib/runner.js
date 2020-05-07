@@ -54,7 +54,10 @@ module.exports  = class Runner {
 			let statements = [];
 
 			for (let service of services){
-				statements.push(api.getImages(service.from));
+				api.getImages(service.from).then(() => {
+					console.log('inside');
+					console.log(...arguments);
+				})
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
 						t: 'local_' + serviceName + "_image"
@@ -75,8 +78,8 @@ module.exports  = class Runner {
 			}
 
 			return Promise.all(statements);
-		}).then((all) => {
-			console.log(all)
+		}).then( results => {
+			console.log(results)
 		}).catch( e => {
 			console.log("ERROR");
 		});
