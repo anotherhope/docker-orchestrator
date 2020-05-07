@@ -8,6 +8,8 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
+console.log(fs.readFileSync('/etc/hosts'));
+
 module.exports  = class Runner {
 
 	static deploy(path = null){
@@ -16,38 +18,27 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
-			if(!fs.existsSync('/tmp/.build/' + serviceName)){
 				fs.mkdirp('/tmp/.build/' + serviceName);
-			}	fs.emptyDirSync('/tmp/.build/' + serviceName);
 				fs.copySync('/etc/docker.d/contexts/binary', '/tmp/.build/' + serviceName);
 				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, '/tmp/.build/' + serviceName + '/Dockerfile')
 
-				api.buildImage({ 
-					context: '/tmp/.build/' + serviceName
-				},{
+				api.buildImage({ context: '/tmp/.build/' + serviceName },{
 					t: serviceName
 				}, (err, response) => {
-
-					let body = '';
-						response.setEncoding('utf8');
+					if (!err){
 						response.on('data', (chunk) => {
-							body += chunk;
-
 							try {
 								process.stdout.write(JSON.parse(chunk).stream);
 							} catch(e) {
-								console.log('error:',chunk);
+								process.stdout.write(chunk);
 							}
-						}).on('end', () => {
-							//console.log(body)
+						}).on('end',() => {
+							fs.removeSync('/tmp/.build/' + serviceName)
 						});
-
-					//console.log(...arguments);
+					}
 				});
 
 		}
-
-
 
 		//console.log(compose);
 	}
