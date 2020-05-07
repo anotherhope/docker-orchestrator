@@ -8,8 +8,6 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
-const build = __dirname + '/../../.build';
-
 module.exports  = class Runner {
 
 	static deploy(path = null){
@@ -18,18 +16,27 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
-			if(!fs.existsSync(build + '/' + serviceName)){
-				fs.mkdirp(build + '/' + serviceName);
-			}	fs.emptyDirSync(build + '/' + serviceName);
-				fs.copySync('/etc/docker.d/contexts/binary', build + '/' + serviceName);
-				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, build + '/' + serviceName + '/Dockerfile')
+			if(!fs.existsSync('/tmp/.build/' + serviceName)){
+				fs.mkdirp('/tmp/.build/' + serviceName);
+			}	fs.emptyDirSync('/tmp/.build/' + serviceName);
+				fs.copySync('/etc/docker.d/contexts/binary', '/tmp/.build/' + serviceName);
+				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, '/tmp/.build/' + serviceName + '/Dockerfile')
 
 				api.buildImage({ 
-					context: build + '/' + serviceName
+					context: '/tmp/.build/' + serviceName
 				},{
 					t: serviceName
-				}, function (err, response) {
-					console.log(...arguments);
+				}, (err, response) => {
+
+					let body = '';
+						req.setEncoding('utf8');
+						req.on('data', (chunk) => {
+							body += chunk;
+						}).on('end', () => {
+							console.log(body)
+						});
+
+					//console.log(...arguments);
 				});
 
 		}
