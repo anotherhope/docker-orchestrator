@@ -11,13 +11,13 @@ const api 		= new DockerAPI({
 
 module.exports  = class Runner {
 
-	static deploy(path = null){
-		let compose = Parser.loadFrom(path);
+	static deploy(composePath = null){
+		let compose = Parser.loadFrom(composePath);
 
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
-				let context = path.resolve(path.dirname(path),service.build.context);
+				let context = path.resolve(path.dirname(composePath),service.build.context);
 				fs.mkdirp('/tmp/.build/' + serviceName);
 				fs.copySync(context, '/tmp/.build/' + serviceName);
 				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile')
