@@ -56,6 +56,7 @@ module.exports  = class Runner {
 			for (let serviceName of services){
 				statements.push(
 					new Promise((resolve,reject) => {
+						console.log(api.getImages(serviceName));
 						resolve(api.getImages(serviceName))
 					})
 				);
