@@ -19,6 +19,7 @@ module.exports  = class Runner {
 
 				let context = path.resolve(path.dirname(composePath),service.build.context);
 				fs.mkdirp('/tmp/.build/' + serviceName);
+				fs.emptyDirSync('/tmp/.build/' + serviceName);
 				fs.copySync(context, '/tmp/.build/' + serviceName);
 				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile')
 
