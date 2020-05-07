@@ -67,7 +67,10 @@ module.exports  = class Runner {
 							}
 						}).on('end',() => {
 
-								console.log(api.getImage(service.name+'_'))
+								console.log(
+									api.getImage(service.name).get(),
+									api.getImage(service.name+'_').get()
+								)
 
 						});
 					}
