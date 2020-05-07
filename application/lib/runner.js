@@ -35,6 +35,7 @@ module.exports  = class Runner {
 							lineReader.close();
 						}
 					}).on('close',() => {
+						service.name = serviceName;
 						resolve(service);
 					});
 				})
@@ -50,8 +51,14 @@ module.exports  = class Runner {
 		this.prepare(composePath).then((services) => {
 			console.log(services);
 
-			for (let serviceName of services){
+			let statements = [];
 
+			for (let serviceName of services){
+				statements.push(
+					new Promise((resolve,reject) => {
+						resolve(api.getImages(serviceName))
+					})
+				);
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
 						t: 'local_' + serviceName + "_image"
@@ -70,7 +77,11 @@ module.exports  = class Runner {
 					});
 				*/
 			}
-		})
+
+			return Promise.all(statements);
+		}).then(() => {
+			console.log(...arguments)
+		});
 
 	}
 
