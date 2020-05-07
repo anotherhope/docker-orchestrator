@@ -56,7 +56,7 @@ module.exports  = class Runner {
 			for (let service of services){
 
 				api.buildImage({ context: '/tmp/.build/' + serviceName },{
-					t: 'local_' + serviceName + "_image"
+					t: service.name
 				}, (err, response) => {
 					if (!err){
 						response.on('data', (chunk) => {
@@ -67,7 +67,7 @@ module.exports  = class Runner {
 							}
 						}).on('end',() => {
 
-								api.getImages(service.from).then( response => {
+								api.getImages(service.name).then( response => {
 									response.on('data', (chunk) => {
 										console.log(chunk);
 									});
