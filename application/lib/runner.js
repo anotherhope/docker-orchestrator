@@ -54,17 +54,30 @@ module.exports  = class Runner {
 			let statements = [];
 
 			for (let service of services){
-				api.getImages(service.from).then( response => {
-					response.on('data', (chunk) => {
-						/*
-						try {
-							process.stdout.write(JSON.parse(chunk).stream);
-						} catch(e) {
-							process.stdout.write(chunk);
-						}
-						*/
-					});
-				})
+
+				api.buildImage({ context: '/tmp/.build/' + serviceName },{
+					t: 'local_' + serviceName + "_image"
+				}, (err, response) => {
+					if (!err){
+						response.on('data', (chunk) => {
+							try {
+								process.stdout.write(JSON.parse(chunk).stream);
+							} catch(e) {
+								process.stdout.write(chunk);
+							}
+						}).on('end',() => {
+
+								api.getImages(service.from).then( response => {
+									response.on('data', (chunk) => {
+										console.log(chunk);
+									});
+								})
+
+						});
+					}
+				});
+
+
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
 						t: 'local_' + serviceName + "_image"
