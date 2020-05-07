@@ -101,7 +101,7 @@ module.exports  = class Runner {
 		}).then( results => {
 			console.log(results)
 		}).catch( e => {
-			console.log("ERROR");
+			console.log(e);
 		});
 
 	}
