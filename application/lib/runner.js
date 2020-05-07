@@ -66,13 +66,13 @@ module.exports  = class Runner {
 								process.stdout.write(chunk);
 							}
 						}).on('end',() => {
-							
+
 								api.getImage( 'base_' + service.name ).get()
-									.then(()  => { console.log('exist:' +  'base_' + service.name ); })
+									.then((a,b,c,d)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
 									.catch(() => { console.log('not exist:' +  'base_' + service.name ); })
 
 								api.getImage( 'base_' + service.name  + '_').get()
-									.then(()  => { console.log('exist:' +  'base_' + service.name  + '_'); })
+									.then((a,b,c,d)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
 									.catch(() => { console.log('not exist:' +  'base_' + service.name  + '_'); })
 
 						});
