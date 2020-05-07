@@ -79,7 +79,7 @@ module.exports  = class Runner {
 			return Promise.all(statements);
 		}).then((all) => {
 			console.log(all)
-		}).error( e => {
+		}).catch( e => {
 			console.log(e);
 		});
 
