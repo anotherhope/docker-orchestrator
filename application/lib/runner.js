@@ -29,8 +29,9 @@ module.exports  = class Runner {
 				}, (err, response) => {
 
 					let body = '';
-						response.setEncoding('utf8');
-						response.on('data', (chunk) => {
+						responses.setEncoding('utf8');
+						
+						responses.on('data', (chunk) => {
 							body += chunk;
 						}).on('end', () => {
 							console.log(body)
