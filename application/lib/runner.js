@@ -28,7 +28,7 @@ module.exports  = class Runner {
 			}).on('line', (line) => {
 				let match = line.match(/FROM\s([a-z0-9_]+)/gi);
 				if (match){
-					console.log('>>',match[1]);
+					console.log('>>',match);
 					//lineReader.close();
 					//service.from = match[0]
 				}
