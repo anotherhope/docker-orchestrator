@@ -53,11 +53,11 @@ module.exports  = class Runner {
 
 			let statements = [];
 
-			for (let serviceName of services){
+			for (let service of services){
 				statements.push(
 					new Promise((resolve,reject) => {
-						console.log(api.getImages(serviceName));
-						resolve(api.getImages(serviceName))
+						console.log(api.getImages(service.from));
+						resolve(api.getImages(service.from))
 					})
 				);
 				/*
