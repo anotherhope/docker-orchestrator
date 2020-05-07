@@ -48,6 +48,7 @@ module.exports  = class Runner {
 	static deploy(composePath){
 
 		this.prepare(composePath).then((services) => {
+			console.log(services);
 
 			for (let serviceName of services){
 
