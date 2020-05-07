@@ -32,7 +32,12 @@ module.exports  = class Runner {
 						response.setEncoding('utf8');
 						response.on('data', (chunk) => {
 							body += chunk;
-							console.log(chunk);
+
+							try {
+								console.log('error:',JSON.parse(chunk).stream);
+							} catch(e) {
+								console.log('error:',chunk);
+							}
 						}).on('end', () => {
 							//console.log(body)
 						});
