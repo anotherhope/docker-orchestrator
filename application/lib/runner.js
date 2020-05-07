@@ -8,8 +8,6 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
-console.log(fs.readFileSync('/etc/hosts').toString());
-
 module.exports  = class Runner {
 
 	static deploy(path = null){
@@ -23,7 +21,7 @@ module.exports  = class Runner {
 				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, '/tmp/.build/' + serviceName + '/Dockerfile')
 
 				api.buildImage({ context: '/tmp/.build/' + serviceName },{
-					t: serviceName
+					t: 'local_' + serviceName + "_image"
 				}, (err, response) => {
 					if (!err){
 						response.on('data', (chunk) => {
