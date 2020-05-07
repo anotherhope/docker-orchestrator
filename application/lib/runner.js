@@ -77,8 +77,10 @@ module.exports  = class Runner {
 			}
 
 			return Promise.all(statements);
-		}).then(() => {
-			console.log(...arguments)
+		}).then((all) => {
+			console.log(all)
+		}).error( e => {
+			console.log(e);
 		});
 
 	}
