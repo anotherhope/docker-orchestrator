@@ -11,21 +11,29 @@ const api 		= new DockerAPI({
 
 module.exports  = class Runner {
 
-	static deploy(composePath = null){
-		let compose = Parser.loadFrom(composePath);
+	static prepare(composePath){
+		let compose    = Parser.loadFrom(composePath);
+		let buildOrder = [];
 
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
-
-				let context = path.resolve(path.dirname(composePath),service.build.context);
+			let context = path.resolve(path.dirname(composePath),service.build.context);
 				fs.mkdirp('/tmp/.build/' + serviceName);
 				fs.emptyDirSync('/tmp/.build/' + serviceName);
 				fs.copySync(context, '/tmp/.build/' + serviceName);
-				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile')
-
+				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile');
+			
+			service.serviceName = serviceName;
+			buildOrder.push(service);
 		}
 
-		for (let serviceName in compose.services){
+		console.log(buildOrder);
+
+		return buildOrder;
+	}
+
+	static deploy(composePath){
+		for (let serviceName of this.prepare(composePath)){
 
 			/*
 				api.buildImage({ context: '/tmp/.build/' + serviceName },{
@@ -45,8 +53,6 @@ module.exports  = class Runner {
 				});
 			*/
 		}
-
-		//console.log(compose);
 	}
 
 
