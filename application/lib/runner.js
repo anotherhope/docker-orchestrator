@@ -34,9 +34,9 @@ module.exports  = class Runner {
 							body += chunk;
 
 							try {
-								//console.log(JSON.parse(chunk).stream);
+								console.log(JSON.parse(chunk).stream);
 							} catch(e) {
-								console.log('error:',chunk);
+								//console.log('error:',chunk);
 							}
 						}).on('end', () => {
 							//console.log(body)
