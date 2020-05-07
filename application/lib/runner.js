@@ -32,7 +32,7 @@ module.exports  = class Runner {
 					//lineReader.close();
 					//service.from = match[0]
 				}
-
+				console.log(line);
 			});
 
 
