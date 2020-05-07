@@ -28,13 +28,11 @@ module.exports  = class Runner {
 			}).on('line', (line) => {
 				let match = /FROM\s([a-z0-9_]+)/gi.exec(line);
 				if (match && match[1]){
-					console.log('>>',match[1]);
-					//lineReader.close();
-					//service.from = match[0]
+					service.from = match[1];
+					lineReader.close();
 				}
-				//console.log(line);
 			});
-
+			console.log(service.from);
 
 
 			service.serviceName = serviceName;
