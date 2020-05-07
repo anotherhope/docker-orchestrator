@@ -68,9 +68,7 @@ module.exports  = class Runner {
 						}).on('end',() => {
 
 								api.getImage(service.name).then( response => {
-									response.on('data', (chunk) => {
-										console.log(chunk.toString());
-									});
+									console.log(response)
 								})
 
 						});
