@@ -66,6 +66,7 @@ module.exports  = class Runner {
 								process.stdout.write(chunk);
 							}
 						}).on('end',() => {
+							setTimeout(() => {
 								api.getImage(service.name).get()
 									.then(()  => { console.log('not exist:' + service.name); })
 									.catch(() => { console.log('not exist:' + service.name); })
@@ -73,7 +74,7 @@ module.exports  = class Runner {
 								api.getImage(service.name + '_').get()
 									.then(()  => { console.log('not exist:' + service.name + '_'); })
 									.catch(() => { console.log('not exist:' + service.name + '_'); })
-
+							},10000)
 						});
 					}
 				});
