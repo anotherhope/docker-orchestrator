@@ -54,8 +54,14 @@ module.exports  = class Runner {
 			let statements = [];
 
 			for (let service of services){
-				api.getImages(service.from).then((a,b,c,d) => {
-					console.log('inside',a,b,c,d);
+				api.getImages(service.from).then( response => {
+					response.on('data', (chunk) => {
+						try {
+							process.stdout.write(JSON.parse(chunk).stream);
+						} catch(e) {
+							process.stdout.write(chunk);
+						}
+					});
 				})
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
