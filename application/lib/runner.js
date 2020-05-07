@@ -56,11 +56,14 @@ module.exports  = class Runner {
 			for (let service of services){
 				api.getImages(service.from).then( response => {
 					response.on('data', (chunk) => {
+						console.log(chunk);
+						/*
 						try {
 							process.stdout.write(JSON.parse(chunk).stream);
 						} catch(e) {
 							process.stdout.write(chunk);
 						}
+						*/
 					});
 				})
 				/*
