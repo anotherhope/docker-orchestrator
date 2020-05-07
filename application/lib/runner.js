@@ -22,8 +22,23 @@ module.exports  = class Runner {
 				fs.emptyDirSync('/tmp/.build/' + serviceName);
 				fs.copySync(context, '/tmp/.build/' + serviceName);
 				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile');
-			
+
+			const lineReader = require('readline').createInterface({
+				input: fs.createReadStream('/tmp/.build/' + serviceName + '/Dockerfile'),
+			}).on('line', (line) => {
+				let match = line.match(/FROM\s(a-Z0-9_+)/)
+				if (match){
+					console.log(match);
+					//lineReader.close();
+					//service.from = match[0]
+				}
+
+			});
+
+
+
 			service.serviceName = serviceName;
+
 			buildOrder.push(service);
 		}
 
