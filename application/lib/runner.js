@@ -80,7 +80,7 @@ module.exports  = class Runner {
 		}).then((all) => {
 			console.log(all)
 		}).catch( e => {
-			console.log(e);
+			console.log("ERROR");
 		});
 
 	}
