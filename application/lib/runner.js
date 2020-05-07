@@ -69,7 +69,7 @@ module.exports  = class Runner {
 
 								api.getImages(service.name).then( response => {
 									response.on('data', (chunk) => {
-										console.log(chunk);
+										console.log(chunk.toString());
 									});
 								})
 
@@ -99,7 +99,7 @@ module.exports  = class Runner {
 
 			return Promise.all(statements);
 		}).then( results => {
-			console.log(results)
+			
 		}).catch( e => {
 			console.log(e);
 		});
