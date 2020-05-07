@@ -55,7 +55,7 @@ module.exports  = class Runner {
 
 			for (let service of services){
 
-				api.buildImage({ context: '/tmp/.build/' + serviceName },{
+				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: service.name
 				}, (err, response) => {
 					if (!err){
