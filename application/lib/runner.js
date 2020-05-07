@@ -1,6 +1,7 @@
 const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
 const fs 		= require("fs-extra");
+const path 		= require("path");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 	host: process.env.DOCKER_HOST || '192.168.1.4',
@@ -16,10 +17,16 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			let service = compose.services[serviceName];
 
+				let context = path.resolve(path.dirname(path),service.build.context);
 				fs.mkdirp('/tmp/.build/' + serviceName);
-				fs.copySync('/etc/docker.d/contexts/binary', '/tmp/.build/' + serviceName);
-				fs.copySync('/etc/docker.d/dockerfiles/bases/'+ serviceName, '/tmp/.build/' + serviceName + '/Dockerfile')
+				fs.copySync(context, '/tmp/.build/' + serviceName);
+				fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile')
 
+		}
+
+		for (let serviceName in compose.services){
+
+			/*
 				api.buildImage({ context: '/tmp/.build/' + serviceName },{
 					t: 'local_' + serviceName + "_image"
 				}, (err, response) => {
@@ -35,7 +42,7 @@ module.exports  = class Runner {
 						});
 					}
 				});
-
+			*/
 		}
 
 		//console.log(compose);
