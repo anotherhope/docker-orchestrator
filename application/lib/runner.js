@@ -56,7 +56,7 @@ module.exports  = class Runner {
 			for (let service of services){
 
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
-					t: service.name
+					t: 'base_' + service.name
 				}, (err, response) => {
 					if (!err){
 						response.on('data', (chunk) => {
@@ -67,13 +67,13 @@ module.exports  = class Runner {
 							}
 						}).on('end',() => {
 							setTimeout(() => {
-								api.getImage(service.name).get()
-									.then(()  => { console.log('not exist:' + service.name); })
-									.catch(() => { console.log('not exist:' + service.name); })
+								api.getImage( 'base_' + service.name ).get()
+									.then(()  => { console.log('not exist:' +  'base_' + service.name ); })
+									.catch(() => { console.log('not exist:' +  'base_' + service.name ); })
 
-								api.getImage(service.name + '_').get()
-									.then(()  => { console.log('not exist:' + service.name + '_'); })
-									.catch(() => { console.log('not exist:' + service.name + '_'); })
+								api.getImage( 'base_' + service.name  + '_').get()
+									.then(()  => { console.log('not exist:' +  'base_' + service.name  + '_'); })
+									.catch(() => { console.log('not exist:' +  'base_' + service.name  + '_'); })
 							},10000)
 						});
 					}
