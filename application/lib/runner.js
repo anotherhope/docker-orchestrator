@@ -54,9 +54,7 @@ module.exports  = class Runner {
 			let statements = [];
 
 			for (let service of services){
-				statements.push(
-					api.getImages(service.from)
-				);
+				statements.push(api.getImages(service.from));
 				/*
 					api.buildImage({ context: '/tmp/.build/' + serviceName },{
 						t: 'local_' + serviceName + "_image"
