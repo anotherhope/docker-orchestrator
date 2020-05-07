@@ -32,9 +32,9 @@ module.exports  = class Runner {
 						response.setEncoding('utf8');
 						response.on('data', (chunk) => {
 							body += chunk;
-							console.log(chunk);
+							console.log(chunk.stream);
 						}).on('end', () => {
-							console.log(body)
+							//console.log(body)
 						});
 
 					//console.log(...arguments);
