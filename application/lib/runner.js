@@ -8,7 +8,7 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
-console.log(fs.readFileSync('/etc/hosts'));
+console.log(fs.readFileSync('/etc/hosts').toString());
 
 module.exports  = class Runner {
 
