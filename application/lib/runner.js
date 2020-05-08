@@ -78,7 +78,7 @@ module.exports  = class Runner {
 					});
 
 				}else{
-					console.lot('notfind',services.find( s => s.name === service.from), service.from);
+					console.log('notfind',services.find( s => s.name === service.from), service.from);
 				}
 
 			} else {
