@@ -72,6 +72,8 @@ module.exports  = class Runner {
 							t: '_' + serviceName
 						});	
 						*/
+					}).catch( e => {
+						console.log(e);
 					});
 
 				}
