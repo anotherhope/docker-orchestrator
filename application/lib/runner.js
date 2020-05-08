@@ -68,12 +68,14 @@ module.exports  = class Runner {
 					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then((a,b) => {
 						console.log(a,b);
 						/*
-						api.buildImage({ context: '/tmp/.build/' + service.name },{
-							t: '_' + serviceName
-						});	
+							api.buildImage({ context: '/tmp/.build/' + service.name },{
+								t: '_' + serviceName
+							});
 						*/
+					}).then( (a,b,c,d) => {
+						console.log(a,b,c,d);
 					}).catch( e => {
-						console.log(e);
+						console.log(service.name,e);
 					});
 
 				}
