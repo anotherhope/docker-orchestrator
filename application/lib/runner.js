@@ -47,6 +47,7 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true){
+		console.log(fctToRetry);
 		if(typeof retryUntil === 'function'){
 			fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
