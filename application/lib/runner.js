@@ -72,6 +72,7 @@ module.exports  = class Runner {
 								t: '_' + serviceName
 							});
 						*/
+						console.log('build:', service.from, service.name);
 					}).catch( e => {
 						console.log(service.name,e);
 					});
@@ -82,7 +83,7 @@ module.exports  = class Runner {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: 'host_' + service.name
 				}).then( response => {
-					console.log(response);
+					console.log('build:', service.name);
 				}).catch( e => {
 					console.log(service.name,e);
 				});			
