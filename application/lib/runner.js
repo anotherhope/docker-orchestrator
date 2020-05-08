@@ -64,7 +64,7 @@ module.exports  = class Runner {
 			if (service.from.match(/^host_/gi)){
 
 				if (services.find( s => 'host_' + s.name === service.from)){
-
+					console.log(this);
 					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
