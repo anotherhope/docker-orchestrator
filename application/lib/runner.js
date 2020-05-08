@@ -46,17 +46,65 @@ module.exports  = class Runner {
 		return Promise.all(services);
 	}
 
-	static deploy(composePath){
+	static retry(fctToRetry, retryUntil = true){
+		if(typeof retryUntil === 'function'){
+			fctToRetry()
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? ...arguments : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return retryUntil({ ...arguments }, false) ? ...arguments : this.retry(fctToRetry, retryUntil); })
+		} else {
+			fctToRetry()
+				.then(function()  { return  retryUntil ? ...arguments : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return !retryUntil ? ...arguments : this.retry(fctToRetry, retryUntil); })
+		}
+	}
 
-		this.prepare(composePath).then((services) => {
-			console.log(services);
+	static buildImage(services){
+		let statements = [];
+		for (let service of services){
+			if (service.from.match(/^_/gi) && services[service.from]){
 
-			let statements = [];
+				this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then((a,b) => {
+					console.log(a,b);
+					/*
+					api.buildImage({ context: '/tmp/.build/' + service.name },{
+						t: '_' + serviceName
+					});	
+					*/
+				});
 
-			for (let service of services){
+			} else {
+				api.buildImage({ context: '/tmp/.build/' + service.name },{
+					t: '_' + serviceName
+				});				
+			}
+
+
+/*
+
+(err, response) => {
+	if (!err){
+		response.on('data', (chunk) => {
+			try {
+				process.stdout.write(JSON.parse(chunk).stream);
+			} catch(e) {
+				process.stdout.write(chunk);
+			}
+		}).on('end',() => {
+
+		});
+	}
+}
+
+api.getImage( 'base_' + service.name ).get()
+	.then((response)  => { console.log('exist:' +  'base_' + service.name,a ); })
+	.catch(() => { console.log('not exist:' +  'base_' + service.name ); })
+
+api.getImage( 'base_' + service.name  + '_').get()
+	.then((response)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
+	.catch(() => { console.log('not exist:' +  'base_' + service.name  + '_'); })
 
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
-					t: 'base_' + service.name
+					t: '_' + serviceName
 				}, (err, response) => {
 					if (!err){
 						response.on('data', (chunk) => {
@@ -67,44 +115,23 @@ module.exports  = class Runner {
 							}
 						}).on('end',() => {
 
-								api.getImage( 'base_' + service.name ).get()
-									.then((a,b,c,d)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
-									.catch(() => { console.log('not exist:' +  'base_' + service.name ); })
-
-								api.getImage( 'base_' + service.name  + '_').get()
-									.then((a,b,c,d)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
-									.catch(() => { console.log('not exist:' +  'base_' + service.name  + '_'); })
-
 						});
 					}
 				});
+			*/
+		}
 
+		return Promise.all(statements);
+	}
 
-				/*
-					api.buildImage({ context: '/tmp/.build/' + serviceName },{
-						t: 'local_' + serviceName + "_image"
-					}, (err, response) => {
-						if (!err){
-							response.on('data', (chunk) => {
-								try {
-									process.stdout.write(JSON.parse(chunk).stream);
-								} catch(e) {
-									process.stdout.write(chunk);
-								}
-							}).on('end',() => {
-								fs.removeSync('/tmp/.build/' + serviceName)
-							});
-						}
-					});
-				*/
-			}
+	static deploy(composePath){
 
-			return Promise.all(statements);
-		}).then( results => {
-			
-		}).catch( e => {
-			console.log(e);
-		});
+		
+		this.prepare(composePath)
+			.then(this.buildImage)
+			.catch( e => {
+				console.log(e);
+			});
 
 	}
 
