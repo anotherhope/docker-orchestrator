@@ -60,7 +60,7 @@ module.exports  = class Runner {
 
 	static buildImage(services){
 		let statements = [];
-		Object.keys(services);
+		console.log(Object.keys(services));
 		for (let service of services){
 			if (service.from.match(/^_/gi)){
 
