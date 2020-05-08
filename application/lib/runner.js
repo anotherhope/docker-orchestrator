@@ -60,6 +60,7 @@ module.exports  = class Runner {
 
 	static buildImage(services){
 		let statements = [];
+		Object.keys(services);
 		for (let service of services){
 			if (service.from.match(/^_/gi)){
 
@@ -132,7 +133,6 @@ api.getImage( 'base_' + service.name  + '_').get()
 			*/
 		}
 
-		Object.keys(services);
 
 		return Promise.all(statements);
 	}
