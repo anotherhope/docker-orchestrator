@@ -81,7 +81,9 @@ module.exports  = class Runner {
 			} else {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: '_' + service.name
-				});				
+				}).catch( e => {
+						console.log(e);
+				});			
 			}
 
 
