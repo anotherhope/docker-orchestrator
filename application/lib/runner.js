@@ -84,7 +84,7 @@ module.exports  = class Runner {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: 'host_' + service.name
 				}).then( (a,b,c,d) => {
-					//console.log(a,b,c,d);
+					console.log(a,b,c,d);
 				}).catch( e => {
 					console.log(service.name,e);
 				});			
