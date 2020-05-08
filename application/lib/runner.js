@@ -47,6 +47,7 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true){
+		console.log(fctToRetry);
 		if(typeof retryUntil === 'function'){
 			fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
@@ -64,8 +65,8 @@ module.exports  = class Runner {
 			if (service.from.match(/^host_/gi)){
 
 				if (services.find( s => 'host_' + s.name === service.from)){
-
-					this.retry( api.getImage( service.from ).get, true).then( response => {
+					console.log(api.getImage( service.from ).get);
+					this.retry( api.getImage( service.from ).get, (data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
 							api.buildImage({ context: '/tmp/.build/' + service.name },{
