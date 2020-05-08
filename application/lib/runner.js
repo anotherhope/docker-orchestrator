@@ -60,11 +60,13 @@ module.exports  = class Runner {
 
 	static buildImage(services){
 		let statements = [];
+		console.log(this,Runner);
 		for (let service of services){
+			console.log(this,Runner);
 			if (service.from.match(/^host_/gi)){
-
+				console.log(this,Runner);
 				if (services.find( s => 'host_' + s.name === service.from)){
-					console.log(this);
+					console.log(this,Runner);
 					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
