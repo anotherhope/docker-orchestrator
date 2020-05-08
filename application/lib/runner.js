@@ -49,25 +49,23 @@ module.exports  = class Runner {
 	static retry(fctToRetry, retryUntil = true){
 		if(typeof retryUntil === 'function'){
 			fctToRetry()
-				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : this.retry(fctToRetry, retryUntil); }.bind(this))
-				.catch(function() { return retryUntil({ ...arguments }, false) ? { ...arguments } : this.retry(fctToRetry, retryUntil); }.bind(this))
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
+				.catch(function() { return retryUntil({ ...arguments }, false) ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
 		} else {
 			fctToRetry()
-				.then(function()  { return  retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); }.bind(this))
-				.catch(function() { return !retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); }.bind(this))
+				.then(function()  { return  retryUntil ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
+				.catch(function() { return !retryUntil ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
 		}
 	}
 
 	static buildImage(services){
 		let statements = [];
-		console.log(this,Runner);
 		for (let service of services){
-			console.log(this,Runner);
 			if (service.from.match(/^host_/gi)){
-				console.log(this,Runner);
+
 				if (services.find( s => 'host_' + s.name === service.from)){
-					console.log(this,Runner);
-					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
+
+					Runner.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
 							api.buildImage({ context: '/tmp/.build/' + service.name },{
