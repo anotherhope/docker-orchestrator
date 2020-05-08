@@ -132,6 +132,8 @@ api.getImage( 'base_' + service.name  + '_').get()
 			*/
 		}
 
+		Object.keys(services);
+
 		return Promise.all(statements);
 	}
 
