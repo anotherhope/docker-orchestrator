@@ -65,15 +65,13 @@ module.exports  = class Runner {
 
 				if (services[service.from]){
 
-					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then((a,b) => {
-						console.log(a,b);
+					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
+						console.log(response);
 						/*
 							api.buildImage({ context: '/tmp/.build/' + service.name },{
 								t: '_' + serviceName
 							});
 						*/
-					}).then( (a,b,c,d) => {
-						//console.log(a,b,c,d);
 					}).catch( e => {
 						console.log(service.name,e);
 					});
@@ -83,8 +81,8 @@ module.exports  = class Runner {
 			} else {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: 'host_' + service.name
-				}).then( (a,b,c,d) => {
-					console.log(a,b,c,d);
+				}).then( response => {
+					console.log(response);
 				}).catch( e => {
 					console.log(service.name,e);
 				});			
