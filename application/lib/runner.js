@@ -49,12 +49,12 @@ module.exports  = class Runner {
 	static retry(fctToRetry, retryUntil = true){
 		if(typeof retryUntil === 'function'){
 			fctToRetry()
-				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
-				.catch(function() { return retryUntil({ ...arguments }, false) ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return retryUntil({ ...arguments }, false) ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 		} else {
 			fctToRetry()
-				.then(function()  { return  retryUntil ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
-				.catch(function() { return !retryUntil ? { ...arguments } : Runner.retry(fctToRetry, retryUntil); }.bind(this))
+				.then(function()  { return  retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return !retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 		}
 	}
 
@@ -65,7 +65,7 @@ module.exports  = class Runner {
 
 				if (services.find( s => 'host_' + s.name === service.from)){
 
-					this.retry( api.getImage( service.from ).get, (data,statment) => { return statment }).then( response => {
+					this.retry( api.getImage( service.from ).get, true).then( response => {
 						console.log(response);
 						/*
 							api.buildImage({ context: '/tmp/.build/' + service.name },{
