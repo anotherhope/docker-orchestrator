@@ -64,7 +64,7 @@ module.exports  = class Runner {
 			if (service.from.match(/^host_/gi)){
 
 				if (services.find( s => s.name === service.from)){
-
+					console.lot('find');
 					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
@@ -77,6 +77,8 @@ module.exports  = class Runner {
 						console.log(service.name,e);
 					});
 
+				}else{
+					console.lot('notfind',services.find( s => s.name === service.from), service.from);
 				}
 
 			} else {
