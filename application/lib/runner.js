@@ -73,7 +73,7 @@ module.exports  = class Runner {
 							});
 						*/
 					}).then( (a,b,c,d) => {
-						console.log(a,b,c,d);
+						//console.log(a,b,c,d);
 					}).catch( e => {
 						console.log(service.name,e);
 					});
@@ -82,9 +82,9 @@ module.exports  = class Runner {
 
 			} else {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
-					t: service.name
+					t: 'host_' + service.name
 				}).then( (a,b,c,d) => {
-					console.log(a,b,c,d);
+					//console.log(a,b,c,d);
 				}).catch( e => {
 					console.log(service.name,e);
 				});			
