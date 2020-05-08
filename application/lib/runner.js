@@ -140,7 +140,7 @@ api.getImage( 'base_' + service.name  + '_').get()
 	static deploy(composePath){
 
 		this.prepare(composePath)
-			.then(this.buildImage.bind(this))
+			.then(this.buildImage)
 			.catch( e => {
 				console.log(e);
 			});
