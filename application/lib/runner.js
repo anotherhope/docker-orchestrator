@@ -61,20 +61,24 @@ module.exports  = class Runner {
 	static buildImage(services){
 		let statements = [];
 		for (let service of services){
-			if (service.from.match(/^_/gi) && services[service.from]){
+			if (service.from.match(/^_/gi)){
 
-				this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then((a,b) => {
-					console.log(a,b);
-					/*
-					api.buildImage({ context: '/tmp/.build/' + service.name },{
-						t: '_' + serviceName
-					});	
-					*/
-				});
+				if (services[service.from]){
+
+					this.retry( api.getImage( service.from ).get,(data,statment) => { return statment }).then((a,b) => {
+						console.log(a,b);
+						/*
+						api.buildImage({ context: '/tmp/.build/' + service.name },{
+							t: '_' + serviceName
+						});	
+						*/
+					});
+
+				}
 
 			} else {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
-					t: '_' + serviceName
+					t: '_' + service.name
 				});				
 			}
 
