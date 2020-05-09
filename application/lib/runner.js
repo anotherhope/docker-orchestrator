@@ -115,7 +115,7 @@ module.exports  = class Runner {
 
 		this.prepare(composePath)
 			.then( services => this.buildImage(services) )
-			.then( services => this)
+			//.then( services => this)
 			.catch( e => {
 				console.log(e);
 			});
