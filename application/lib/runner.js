@@ -75,12 +75,11 @@ module.exports  = class Runner {
 				statements.push(
 					new Promise((resolve, reject) => {
 						if (services.find( s => 'host_' + s.name === service.from)){
-							// this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment })
 							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
 								api.buildImage({ context: '/tmp/.build/' + service.name },{
 									t: 'host_' + service.name
 								}).then( response => {
-									//response.on('data', this.logIncomingMessage);
+									response.on('data', this.logIncomingMessage);
 									response.on('end', (a,b,c) => {
 										console.log(a,b,c)
 										resolve('host_' + service.name);
@@ -99,7 +98,7 @@ module.exports  = class Runner {
 						api.buildImage({ context: '/tmp/.build/' + service.name },{
 							t: 'host_' + service.name
 						}).then( response => {
-							//response.on('data', this.logIncomingMessage);
+							response.on('data', this.logIncomingMessage);
 							response.on('end', (a,b,c) => {
 								console.log(a,b,c)
 								resolve('host_' + service.name);
