@@ -72,24 +72,27 @@ module.exports  = class Runner {
 		let statements = [];
 		for (let service of services){
 			if (service.from.match(/^host_/gi)){
+				statements.push(
+					new Promise((resolve, reject) => {
+						if (services.find( s => 'host_' + s.name === service.from)){
+							// this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment })
+							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
+								api.buildImage({ context: '/tmp/.build/' + service.name },{
+									t: 'host_' + service.name
+								}).then( response => {
+									//response.on('data', this.logIncomingMessage);
+									response.on('end', (a,b,c) => {
+										console.log(a,b,c)
+										resolve('host_' + service.name);
+									});
+								});
+							}).catch( e => {
+								console.log(service.name,e);
+							});
 
-				if (services.find( s => 'host_' + s.name === service.from)){
-					// this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment })
-					this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
-						api.buildImage({ context: '/tmp/.build/' + service.name },{
-							t: 'host_' + service.name
-						}).then( response => {
-							response.on('data', this.logIncomingMessage);
-							console.log('build:', service.from, service.name, response.constructor);
-						}).catch( e => {
-							console.log(e);
-						});
-					}).catch( e => {
-						console.log(service.name,e);
-					});
-
-				}
-
+						}
+					})
+				);
 			} else {
 				statements.push(
 					new Promise((resolve, reject) => {
@@ -157,7 +160,7 @@ api.getImage( 'base_' + service.name  + '_').get()
 
 		this.prepare(composePath)
 			.then( services => this.buildImage(services) )
-			.then( () => { console.log(rtr); })
+			.then( services => { console.log(rtr,services); })
 			.catch( e => {
 				console.log(e);
 			});
