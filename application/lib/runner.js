@@ -53,7 +53,7 @@ module.exports  = class Runner {
 		return Promise.all(services);
 	}
 
-	static retry(fctToRetry, retryUntil = true, delayBeforRetry = 1000){
+	static retry(fctToRetry, retryUntil = true, delayBeforRetry = 0){
 		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
