@@ -49,12 +49,12 @@ module.exports  = class Runner {
 	static retry(fctToRetry, retryUntil = true){
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
-				.then(function()  { return retryUntil({ ...arguments }, true)  ? arguments : this.retry(fctToRetry, retryUntil); })
-				.catch(function() { return retryUntil({ ...arguments }, false) ? arguments : this.retry(fctToRetry, retryUntil); })
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(arguments) : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(arguments) : this.retry(fctToRetry, retryUntil); })
 		} else {
 			return fctToRetry()
-				.then(function()  { return  retryUntil ? arguments : this.retry(fctToRetry, retryUntil); })
-				.catch(function() { return !retryUntil ? arguments : this.retry(fctToRetry, retryUntil); })
+				.then(function()  { return  retryUntil ? Promise.resolve(arguments) : this.retry(fctToRetry, retryUntil); })
+				.catch(function() { return !retryUntil ? Promise.resolve(arguments) : this.retry(fctToRetry, retryUntil); })
 		}
 	}
 
@@ -70,7 +70,7 @@ module.exports  = class Runner {
 								t: '_' + serviceName
 							});
 						*/
-						console.log('build:', service.from, service.name, response.constructor,response);
+						console.log('build:', service.from, service.name, response.constructor, response);
 					}).catch( e => {
 						console.log(service.name,e);
 					});
