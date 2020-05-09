@@ -10,8 +10,6 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
-let rtr = 0;
-
 module.exports  = class Runner {
 
 	static prepare(composePath){
@@ -54,7 +52,6 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true, delayBeforRetry = 1000){
-		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
@@ -77,9 +74,9 @@ module.exports  = class Runner {
 	static buildImage(services){
 		let statements = [];
 		for (let service of services){
-			if (service.from.match(/^host_/gi)){
-				statements.push(
-					new Promise((resolve, reject) => {
+			statements.push(
+				service.from.match(/^host_/gi) !== false 
+					? new Promise((resolve, reject) => {
 						if (services.find( s => 'host_' + s.name === service.from)){
 							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
 								api.buildImage({ context: '/tmp/.build/' + service.name },{
@@ -93,10 +90,7 @@ module.exports  = class Runner {
 							})
 						}
 					})
-				);
-			} else {
-				statements.push(
-					new Promise((resolve, reject) => {
+					: new Promise((resolve, reject) => {
 						api.buildImage({ context: '/tmp/.build/' + service.name },{
 							t: 'host_' + service.name
 						}).then( response => {
@@ -106,8 +100,7 @@ module.exports  = class Runner {
 							});
 						})
 					})
-				);	
-			}
+			);
 		}
 
 		return Promise.all(statements);
@@ -117,7 +110,7 @@ module.exports  = class Runner {
 
 		this.prepare(composePath)
 			.then( services => this.buildImage(services) )
-			.then( services => { console.log(rtr,services); })
+			.then( services => this.)
 			.catch( e => {
 				console.log(e);
 			});
