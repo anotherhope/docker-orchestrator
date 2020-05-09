@@ -21,25 +21,30 @@ module.exports  = class Runner {
 		for (let serviceName in compose.services){
 			services.push(
 				new Promise((resolve,reject) => {
-					let service = compose.services[serviceName];
-					let context = path.resolve(path.dirname(composePath),service.build.context);
+
+					let service    = compose.services[serviceName];
+					let context    = path.resolve(path.dirname(composePath),service.build.context);
+					let dockerfile = path.resolve(context,service.build.dockerfile);
+
+					if( fs.existSync(context) && fs.existSync(dockerfile)){
 						fs.mkdirp('/tmp/.build/' + serviceName);
 						fs.emptyDirSync('/tmp/.build/' + serviceName);
 						fs.copySync(context, '/tmp/.build/' + serviceName);
 						fs.copySync(path.resolve(context,service.build.dockerfile), '/tmp/.build/' + serviceName + '/Dockerfile');
 
-					const lineReader = readline.createInterface({
-						input: fs.createReadStream('/tmp/.build/' + serviceName + '/Dockerfile')
-					}).on('line', (line) => {
-						let match = /FROM\s([a-z0-9_]+)/gi.exec(line);
-						if (match && match[1]){
-							service.from = match[1];
-							lineReader.close();
-						}
-					}).on('close',() => {
-						service.name = serviceName;
-						resolve(service);
-					});
+						const lineReader = readline.createInterface({
+							input: fs.createReadStream('/tmp/.build/' + serviceName + '/Dockerfile')
+						}).on('line', (line) => {
+							let match = /FROM\s([a-z0-9_]+)/gi.exec(line);
+							if (match && match[1]){
+								service.from = match[1];
+								lineReader.close();
+							}
+						}).on('close',() => {
+							service.name = serviceName;
+							resolve(service);
+						});
+					}
 				})
 			)
 
@@ -49,6 +54,7 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true){
+		rtr++
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
@@ -80,15 +86,11 @@ module.exports  = class Runner {
 									t: 'host_' + service.name
 								}).then( response => {
 									response.on('data', this.logIncomingMessage);
-									response.on('end', (a,b,c) => {
-										console.log(a,b,c)
+									response.on('end', () => {
 										resolve('host_' + service.name);
 									});
 								});
-							}).catch( e => {
-								console.log(service.name,e);
-							});
-
+							})
 						}
 					})
 				);
@@ -99,8 +101,7 @@ module.exports  = class Runner {
 							t: 'host_' + service.name
 						}).then( response => {
 							response.on('data', this.logIncomingMessage);
-							response.on('end', (a,b,c) => {
-								console.log(a,b,c)
+							response.on('end', () => {
 								resolve('host_' + service.name);
 							});
 						})
@@ -108,49 +109,7 @@ module.exports  = class Runner {
 				);	
 			}
 
-
-/*
-
-(err, response) => {
-	if (!err){
-		response.on('data', (chunk) => {
-			try {
-				process.stdout.write(JSON.parse(chunk).stream);
-			} catch(e) {
-				process.stdout.write(chunk);
-			}
-		}).on('end',() => {
-
-		});
-	}
-}
-
-api.getImage( 'base_' + service.name ).get()
-	.then((response)  => { console.log('exist:' +  'base_' + service.name,a ); })
-	.catch(() => { console.log('not exist:' +  'base_' + service.name ); })
-
-api.getImage( 'base_' + service.name  + '_').get()
-	.then((response)  => { console.log('exist:' +  'base_' + service.name,a,b,c,d ); })
-	.catch(() => { console.log('not exist:' +  'base_' + service.name  + '_'); })
-
-				api.buildImage({ context: '/tmp/.build/' + service.name },{
-					t: '_' + serviceName
-				}, (err, response) => {
-					if (!err){
-						response.on('data', (chunk) => {
-							try {
-								process.stdout.write(JSON.parse(chunk).stream);
-							} catch(e) {
-								process.stdout.write(chunk);
-							}
-						}).on('end',() => {
-
-						});
-					}
-				});
-			*/
 		}
-
 
 		return Promise.all(statements);
 	}
