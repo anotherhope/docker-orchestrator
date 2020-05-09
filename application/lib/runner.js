@@ -66,7 +66,7 @@ module.exports  = class Runner {
 
 				if (services.find( s => 'host_' + s.name === service.from)){
 					let imgGetter = api.getImage( service.from );
-					this.retry( imgGetter.get.bind(imgGetter), (data,statment) => { return statment }).then( response => {
+					this.retry( imgGetter.get, (data,statment) => { return statment }).then( response => {
 						console.log(response);
 						/*
 							api.buildImage({ context: '/tmp/.build/' + service.name },{
