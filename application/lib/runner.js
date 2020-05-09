@@ -74,9 +74,9 @@ module.exports  = class Runner {
 	static buildImage(services){
 		let statements = [];
 		for (let service of services){
-			if (service.from.match(/^host_/gi)){
-				statements.push(
-					new Promise((resolve, reject) => {
+			statements.push(
+				service.from.match(/^host_/gi)
+					? new Promise((resolve, reject) => {
 						if (services.find( s => 'host_' + s.name === service.from)){
 							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
 								api.buildImage({ context: '/tmp/.build/' + service.name },{
@@ -90,10 +90,7 @@ module.exports  = class Runner {
 							})
 						}
 					})
-				);
-			} else {
-				statements.push(
-					new Promise((resolve, reject) => {
+					: new Promise((resolve, reject) => {
 						api.buildImage({ context: '/tmp/.build/' + service.name },{
 							t: 'host_' + service.name
 						}).then( response => {
@@ -103,8 +100,8 @@ module.exports  = class Runner {
 							});
 						})
 					})
-				);	
-			}
+			);
+
 		}
 
 		return Promise.all(statements);
