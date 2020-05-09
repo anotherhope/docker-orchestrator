@@ -10,6 +10,8 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 
+let rtr = 0;
+
 module.exports  = class Runner {
 
 	static prepare(composePath){
@@ -52,6 +54,7 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true, delayBeforRetry = 1000){
+		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
