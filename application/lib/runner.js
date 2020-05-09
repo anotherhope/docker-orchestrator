@@ -103,7 +103,7 @@ module.exports  = class Runner {
 			);
 		}
 
-		console.log(services);
+		console.log(statements);
 
 		return Promise.all(statements);
 	}
