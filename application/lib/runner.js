@@ -53,16 +53,16 @@ module.exports  = class Runner {
 		return Promise.all(services);
 	}
 
-	static retry(fctToRetry, retryUntil = true){
+	static retry(fctToRetry, retryUntil = true, delayBeforRetry = 1000){
 		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
-				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
-				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
+				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
 		} else {
 			return fctToRetry()
-				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
-				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
+				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) });
+				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) });
 		}
 	}
 
