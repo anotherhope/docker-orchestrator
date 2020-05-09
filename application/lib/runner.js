@@ -70,7 +70,7 @@ module.exports  = class Runner {
 								t: '_' + serviceName
 							});
 						*/
-						console.log('build:', service.from, service.name, response.constructor, response);
+						console.log('build:', service.from, service.name, response.constructor);
 					}).catch( e => {
 						console.log(service.name,e);
 					});
