@@ -26,7 +26,7 @@ module.exports  = class Runner {
 					let context    = path.resolve(path.dirname(composePath),service.build.context);
 					let dockerfile = path.resolve(context,service.build.dockerfile);
 
-					if( fs.existSync(context) && fs.existSync(dockerfile)){
+					if( fs.existsSync(context) && fs.existsSync(dockerfile)){
 						fs.mkdirp('/tmp/.build/' + serviceName);
 						fs.emptyDirSync('/tmp/.build/' + serviceName);
 						fs.copySync(context, '/tmp/.build/' + serviceName);
@@ -54,7 +54,7 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true){
-		rtr++
+		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
@@ -108,7 +108,6 @@ module.exports  = class Runner {
 					})
 				);	
 			}
-
 		}
 
 		return Promise.all(statements);
