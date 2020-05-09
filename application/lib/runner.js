@@ -48,11 +48,11 @@ module.exports  = class Runner {
 
 	static retry(fctToRetry, retryUntil = true){
 		if(typeof retryUntil === 'function'){
-			fctToRetry()
+			return fctToRetry()
 				.then(function()  { return retryUntil({ ...arguments }, true)  ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 				.catch(function() { return retryUntil({ ...arguments }, false) ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 		} else {
-			fctToRetry()
+			return fctToRetry()
 				.then(function()  { return  retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 				.catch(function() { return !retryUntil ? { ...arguments } : this.retry(fctToRetry, retryUntil); })
 		}
