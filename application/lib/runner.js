@@ -49,15 +49,14 @@ module.exports  = class Runner {
 	}
 
 	static retry(fctToRetry, retryUntil = true){
-		rtr++;
 		if(typeof retryUntil === 'function'){
 			return fctToRetry()
-				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : this.retry(fctToRetry, retryUntil); })
-				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(...arguments) : this.retry(fctToRetry, retryUntil); })
+				.then(function()  { return retryUntil({ ...arguments }, true)  ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
+				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
 		} else {
 			return fctToRetry()
-				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : this.retry(fctToRetry, retryUntil); })
-				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : this.retry(fctToRetry, retryUntil); })
+				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
+				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : Runner.retry(fctToRetry, retryUntil); })
 		}
 	}
 
