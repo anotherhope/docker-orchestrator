@@ -60,6 +60,14 @@ module.exports  = class Runner {
 		}
 	}
 
+	static logIncomingMessage(chunk) {
+		try {
+			process.stdout.write(JSON.parse(chunk).stream);
+		} catch(e) {
+			process.stdout.write(chunk);
+		}
+	}
+
 	static buildImage(services){
 		let statements = [];
 		for (let service of services){
@@ -70,13 +78,7 @@ module.exports  = class Runner {
 						api.buildImage({ context: '/tmp/.build/' + service.name },{
 							t: 'host_' + service.name
 						}).then( response => {
-							response.on('data', (chunk) => {
-								try {
-									process.stdout.write(JSON.parse(chunk).stream);
-								} catch(e) {
-									process.stdout.write(chunk);
-								}
-							});
+							response.on('data', this.logIncomingMessage);
 							console.log('build:', service.from, service.name, response.constructor);
 						}).catch( e => {
 							console.log(e);
@@ -91,13 +93,7 @@ module.exports  = class Runner {
 				api.buildImage({ context: '/tmp/.build/' + service.name },{
 					t: 'host_' + service.name
 				}).then( response => {
-					response.on('data', (chunk) => {
-						try {
-							process.stdout.write(JSON.parse(chunk).stream);
-						} catch(e) {
-							process.stdout.write(chunk);
-						}
-					});
+					response.on('data', this.logIncomingMessage);
 					console.log('build:', service.name, response.constructor);
 				}).catch( e => {
 					console.log(service.name,e);
