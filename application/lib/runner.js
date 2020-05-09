@@ -61,8 +61,8 @@ module.exports  = class Runner {
 				.catch(function() { return retryUntil({ ...arguments }, false) ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
 		} else {
 			return fctToRetry()
-				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) })
-				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) })
+				.then(function()  { return  retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
+				.catch(function() { return !retryUntil ? Promise.resolve(...arguments) : new Promise( resolve => { setTimeout(() => { resolve(Runner.retry(fctToRetry, retryUntil)); },delayBeforRetry) }); })
 		}
 	}
 
