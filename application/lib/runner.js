@@ -67,12 +67,13 @@ module.exports  = class Runner {
 
 				if (services.find( s => 'host_' + s.name === service.from)){
 					this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
-						/*
-							api.buildImage({ context: '/tmp/.build/' + service.name },{
-								t: '_' + serviceName
-							});
-						*/
-						console.log('build:', service.from, service.name, response.constructor);
+						api.buildImage({ context: '/tmp/.build/' + service.name },{
+							t: 'host_' + serviceName
+						}).then( response => {
+							console.log('build:', service.from, service.name, response.constructor);
+						}).catch( e => {
+							console.log(e);
+						});
 					}).catch( e => {
 						console.log(service.name,e);
 					});
@@ -139,7 +140,7 @@ api.getImage( 'base_' + service.name  + '_').get()
 	static deploy(composePath){
 
 		this.prepare(composePath)
-			.then( response => this.buildImage(response) )
+			.then( services => this.buildImage(services) )
 			.then( () => { console.log(rtr); })
 			.catch( e => {
 				console.log(e);
