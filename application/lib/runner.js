@@ -74,9 +74,8 @@ module.exports  = class Runner {
 	static buildImage(services){
 		let statements = [];
 		for (let service of services){
-			if (service.from.match(/^host_/gi) !== false){
+			if (service.from.match(/^host_/gi)){
 				statements.push(
-
 					new Promise((resolve, reject) => {
 						if (services.find( s => 'host_' + s.name === service.from)){
 							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
@@ -115,7 +114,6 @@ module.exports  = class Runner {
 
 		this.prepare(composePath)
 			.then( services => this.buildImage(services) )
-			//.then( services => this)
 			.catch( e => {
 				console.log(e);
 			});
