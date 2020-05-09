@@ -141,6 +141,7 @@ api.getImage( 'base_' + service.name  + '_').get()
 
 		this.prepare(composePath)
 			.then( response => this.buildImage(response) )
+			.then( () => { console.log(rtr); })
 			.catch( e => {
 				console.log(e);
 			});
