@@ -104,7 +104,7 @@ module.exports  = class Runner {
 
 		}
 
-		return Promise.all(services.build);
+		return Promise.all(services.build).then(() => {return services});
 	}
 
 	static createVolumes(services){
