@@ -71,10 +71,10 @@ module.exports  = class Runner {
 		}
 	}
 
-	static buildImage(services){
-		let statements = [];
+	static buildImages(services){
+		services.build = [];
 		for (let service of services){
-			statements.push(
+			services.build.push(
 				service.from.match(/^host_/gi)
 					? new Promise((resolve, reject) => {
 						if (services.find( s => 'host_' + s.name === service.from)){
@@ -104,13 +104,21 @@ module.exports  = class Runner {
 
 		}
 
-		return Promise.all(statements);
+		return Promise.all(services.build);
+	}
+
+	static createVolumes(services){
+		console.log(services)
+
+
+		return Promise.all(true);
 	}
 
 	static deploy(composePath){
 
 		this.prepare(composePath)
-			.then( services => this.buildImage(services) )
+			.then( services => this.buildImages(services) )
+			.then( services => this.createVolumes(services) )
 			.catch( e => {
 				console.log(e);
 			});
