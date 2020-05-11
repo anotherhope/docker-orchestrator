@@ -20,11 +20,12 @@ module.exports  = class Runner {
 			services.push(
 				new Promise((resolve,reject) => {
 
-					let service    = compose.services[serviceName];
-					let context    = path.resolve(path.dirname(composePath),service.build.context);
-					let dockerfile = path.resolve(context,service.build.dockerfile);
-
+					let service   		    = compose.services[serviceName];
+					let context   		    = path.resolve(path.dirname(composePath),service.build.context);
+					let dockerfile		    = path.resolve(context,service.build.dockerfile);
+						service.isBuildable = false;
 					if( fs.existsSync(context) && fs.existsSync(dockerfile)){
+						service.isBuildable = true;
 						fs.mkdirp('/tmp/.build/' + serviceName);
 						fs.emptyDirSync('/tmp/.build/' + serviceName);
 						fs.copySync(context, '/tmp/.build/' + serviceName);
@@ -42,6 +43,8 @@ module.exports  = class Runner {
 							service.name = serviceName;
 							resolve(service);
 						});
+					} else {
+						resolve(service);
 					}
 				})
 			)
@@ -72,39 +75,44 @@ module.exports  = class Runner {
 	}
 
 	static buildImages(services){
-		services.build = [];
+		let statments = [];
 		for (let service of services){
-			services.build.push(
-				service.from.match(/^host_/gi)
-					? new Promise((resolve, reject) => {
-						if (services.find( s => 'host_' + s.name === service.from)){
-							this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
-								api.buildImage({ context: '/tmp/.build/' + service.name },{
-									t: 'host_' + service.name
-								}).then( response => {
-									response.on('data', this.logIncomingMessage);
-									response.on('end', () => {
-										resolve('host_' + service.name);
+			
+			if (service.isBuildable){
+				statments.push(
+					service.from.match(/^host_/gi)
+						? new Promise((resolve, reject) => {
+							if (services.find( s => 'host_' + s.name === service.from)){
+								this.retry( () => { return api.getImage( service.from ).get() }, (data,statment) => { return statment }).then( response => {
+									api.buildImage({ context: '/tmp/.build/' + service.name },{
+										t: 'host_' + service.name
+									}).then( response => {
+										response.on('data', this.logIncomingMessage);
+										response.on('end', () => {
+											resolve('host_' + service.name);
+										});
 									});
+								})
+							}
+						})
+						: new Promise((resolve, reject) => {
+							api.buildImage({ context: '/tmp/.build/' + service.name },{
+								t: 'host_' + service.name
+							}).then( response => {
+								response.on('data', this.logIncomingMessage);
+								response.on('end', () => {
+									resolve('host_' + service.name);
 								});
 							})
-						}
-					})
-					: new Promise((resolve, reject) => {
-						api.buildImage({ context: '/tmp/.build/' + service.name },{
-							t: 'host_' + service.name
-						}).then( response => {
-							response.on('data', this.logIncomingMessage);
-							response.on('end', () => {
-								resolve('host_' + service.name);
-							});
 						})
-					})
-			);
+				);
+			}
 
 		}
 
-		return Promise.all(services.build).then(() => {return services});
+		return Promise.all(statments).then( statments => {
+			return services
+		});
 	}
 
 	static createVolumes(services){
