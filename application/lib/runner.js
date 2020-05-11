@@ -77,7 +77,7 @@ module.exports  = class Runner {
 	static buildImages(services){
 		let statments = [];
 		for (let service of services){
-			
+
 			if (service.isBuildable){
 				statments.push(
 					service.from.match(/^host_/gi)
@@ -119,7 +119,7 @@ module.exports  = class Runner {
 		console.log(services)
 
 
-		return Promise.all(true);
+		return Promise.all(services);
 	}
 
 	static deploy(composePath){
@@ -127,6 +127,7 @@ module.exports  = class Runner {
 		this.prepare(composePath)
 			.then( services => this.buildImages(services) )
 			.then( services => this.createVolumes(services) )
+			.then( services => { console.log(services); })
 			.catch( e => {
 				console.log(e);
 			});
