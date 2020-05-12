@@ -18,20 +18,21 @@ module.exports  = class Architecture extends events {
 		super();
 		this._compose = compose;
 		this.host     = {
-			name 			  : os.hostname			 ? os.hostname()		  : null,
-			cpus 			  : os.cpus				 ? os.cpus()  			  : null,
-			freemem 		  : os.freemem			 ? os.freemem()  		  : null,
-			totalmem 		  : os.totalmem			 ? os.totalmem()  		  : null,
-			homedir 		  : os.homedir			 ? os.homedir()  		  : null,
-			loadavg 		  : os.loadavg			 ? os.loadavg()  		  : null,
-			networkInterfaces : os.networkInterfaces ? os.networkInterfaces() : null,
-			platform 		  : os.platform			 ? os.platform()  		  : null,
-			release 		  : os.release			 ? os.release()  		  : null,
-			type 			  : os.type				 ? os.type()  			  : null,
-			tmpdir 			  : os.tmpdir			 ? os.tmpdir() 			  : null,
-			version 		  : os.version			 ? os.version() 		  : null
+			name 			  : os.hostname			 	  ? os.hostname()		  		 : null,
+			cpus 			  : os.cpus				 	  ? os.cpus()  			  		 : null,
+			freemem 		  : os.freemem			 	  ? os.freemem()  		  		 : null,
+			totalmem 		  : os.totalmem			 	  ? os.totalmem()  		  		 : null,
+			usedmem 		  : os.totalmem	&& os.freemem ? os.totalmem() - os.freemem() : null,
+			homedir 		  : os.homedir			 	  ? os.homedir()  		  		 : null,
+			loadavg 		  : os.loadavg			 	  ? os.loadavg()  		  		 : null,
+			networkInterfaces : os.networkInterfaces 	  ? os.networkInterfaces() 		 : null,
+			platform 		  : os.platform			 	  ? os.platform()  		  		 : null,
+			release 		  : os.release			 	  ? os.release()  		  		 : null,
+			type 			  : os.type				 	  ? os.type()  			  		 : null,
+			tmpdir 			  : os.tmpdir			 	  ? os.tmpdir() 			  	 : null,
+			version 		  : os.version			 	  ? os.version() 		  		 : null
 		}
-		
+
 		setImmediate(() => {
 			this.emit('parse',this)
 		});
