@@ -1,6 +1,13 @@
-require(__dirname + "/lib/runner.js")
-	.deploy(process.env.DOCKER_COMPOSE);
+const Runner 		   = require(__dirname + "/lib/runner.js");
+const Viewer 		   = require(__dirname + "/lib/viewer.js");
+const [,,path,...args] = process.argv;
 
+const architecture	   = Runner.load(path || process.env.DOCKER_COMPOSE)
+	  architecture.on('parse',() => {
+		architecture.prepare()
+	  })
+
+console.log(architecture);
 
 /*
 var cluster = require('cluster');

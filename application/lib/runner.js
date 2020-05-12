@@ -2,6 +2,7 @@ const Parser    = require(__dirname + "/parser.js");
 const DockerAPI = require("dockerode");
 const fs 		= require("fs-extra");
 const path 		= require("path");
+const events 	= require("events");
 const readline 	= require("readline");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
@@ -9,18 +10,30 @@ const api 		= new DockerAPI({
 	port: process.env.DOCKER_PORT || 2376,
 	//version : 'v1.40'
 });
+let instance 	= null;
+module.exports  = class Runner extends events{
 
-module.exports  = class Runner {
+	constructor(){
+		super();
+		this.architecture = architecture 
+		//this.prepare()
+	}
 
-	static prepare(composePath){
-		let compose  = Parser.loadFrom(composePath);
+	static load(pathToCompose){
+		let architecture = Parser.loadFrom(pathToCompose);
+		if(!instance){
+			instance = this(architecture);
+		} return instance;
+	}
+
+	static prepare(architecture){
 		let services = [];
 
-		for (let serviceName in compose.services){
+		for (let serviceName in architecture.services){
 			services.push(
 				new Promise((resolve,reject) => {
 
-					let service   		    = compose.services[serviceName];
+					let service   		    = architecture.services[serviceName];
 					let context   		    = path.resolve(path.dirname(composePath),service.build.context);
 					let dockerfile		    = path.resolve(context,service.build.dockerfile);
 						service.isBuildable = false;
@@ -127,7 +140,7 @@ module.exports  = class Runner {
 		this.prepare(composePath)
 			.then( services => this.buildImages(services) )
 			.then( services => this.createVolumes(services) )
-			.then( services => { console.log(services); })
+			.then( services => { console.log(services) })
 			.catch( e => {
 				console.log(e);
 			});

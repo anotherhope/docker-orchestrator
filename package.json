@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node application/bootloader.js"
   },
+  "bin": {
+    "docker-orchestrator": "bin/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anotherhope/docker-orchestrator.git"
@@ -16,6 +19,8 @@
   },
   "homepage": "https://github.com/anotherhope/docker-orchestrator#readme",
   "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.20",
     "dockerode": "^3.2.0",
     "fs-extra": "^9.0.0",
     "yaml": "^1.9.2"
