@@ -4,6 +4,7 @@ const fs 		= require("fs-extra");
 const path 		= require("path");
 const events 	= require("events");
 const readline 	= require("readline");
+const os 		= require("os");
 const api 		= new DockerAPI({ 
 	//socketPath: process.env.DOCKER_SOCKET || '/var/run/docker.sock'
 	host: process.env.DOCKER_HOST || '192.168.1.4',
@@ -11,18 +12,34 @@ const api 		= new DockerAPI({
 	//version : 'v1.40'
 });
 let instance 	= null;
-module.exports  = class Runner extends events{
+module.exports  = class Architecture extends events {
 
-	constructor(){
+	constructor(compose){
 		super();
-		this.architecture = architecture 
+		this._compose = compose;
+		this.host     = {
+			name : os.hostname(),
+			cpus : os.cpus(),
+			freemem : os.freemem(),
+			totalmem : os.totalmem(),
+			homedir : os.homedir(),
+			loadavg : os.loadavg(),
+			networkInterfaces : os.networkInterfaces(),
+			platform : os.platform(),
+			release : os.release(),
+			type : os.type(),
+			tmpdir : os.tmpdir(),
+			version : os.version()
+		}
 		//this.prepare()
+		setImmediate(() => {
+			this.emit('parse',this)
+		});
 	}
 
 	static load(pathToCompose){
-		let architecture = Parser.loadFrom(pathToCompose);
 		if(!instance){
-			instance = this(architecture);
+			instance = new this(Parser.loadFrom(pathToCompose));
 		} return instance;
 	}
 
